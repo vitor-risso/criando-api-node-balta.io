@@ -22,6 +22,7 @@ mongoose.connect('mongodb://localhost:27017/node-store', {
 
 //Load models
 const Product = require('./models/product');
+const Costumer = require('./models/costumer');
 
 //Load routes
 const indexRoutes = require('./routes/indexRoute');
