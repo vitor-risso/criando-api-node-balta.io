@@ -1,11 +1,12 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Product = mongoose.model('Product');
 const ValidationContract = require('../validators/fluent-validator');
+const repository = require('../repositories/product-repository');
 
 exports.get = (req, res, next) => {
-  Product.find({ active: true }, 'title price slug') //segundo parametro do find são as areas que voce quer ver
+  repository
+    .get()
     .then(result => {
       res.status(200).send(result)
     })
@@ -18,7 +19,8 @@ exports.get = (req, res, next) => {
 }
 
 exports.getBySlug = (req, res, next) => {
-  Product.find({ slug: req.params.slug, active:true  }, 'title description price slug tags') //segundo parametro do find são as areas que voce quer ver
+  repository
+    .getBySlug(req.params.slug)
     .then(result => {
       res.status(200).send(result)
     })
@@ -31,7 +33,8 @@ exports.getBySlug = (req, res, next) => {
 }
 
 exports.getById= (req, res, next) => {
-  Product.findById(req.params.id)
+  repository
+    .getById(req.params.id)
     .then(result => {
       res.status(200).send(result)
     })
@@ -44,7 +47,8 @@ exports.getById= (req, res, next) => {
 }
 
 exports.getByTag= (req, res, next) => {
-  Product.findOneAndUpdate(req.params.tag)
+  repository
+    .getByTag(req.params.tag)
     .then(result => {
       res.status(200).send(result)
     })
@@ -72,15 +76,13 @@ exports.post = (req, res, next) => {
   contract.hasMinLen(req.body.title, 3, "O titulo deve ter no minimo 3 caracteres");
   contract.hasMinLen(req.body.slug, 3, "O slug deve ter no minimo 3 caracteres");
 
-    // Se os dados forem inválidos
-    if (!contract.isValid()) {
-      res.status(400).send(contract.errors()).end();
-      return;
-    }
+  // Se os dados forem inválidos
+  if (!contract.isValid()) {
+    res.status(400).send(contract.errors()).end();
+    return;
+  }
 
-  let product = new Product(req.body);
-
-  product.save()
+  repository.create(req.body)
     .then(result => {
       res.status(201).send({message:'Produto cadastrado'})
     })
@@ -94,14 +96,7 @@ exports.post = (req, res, next) => {
 };
 
 exports.put = (req, res, next) => {
-  Product
-    .findByIdAndUpdate(req.params.id, {
-      $set:{
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price
-      }
-    })
+  repository.edit(req.params.id, req.body)
     .then(x => {
       res.status(200).send({
         message: "O produto foi atualizado com sucesso!"
@@ -117,8 +112,7 @@ exports.put = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-  Product
-    .findOneAndRemove(req.body.id)
+  repository.delete(req.body.id)
     .then(x => {
       res.status(200).send({
         message: "O produto foi removido com sucesso!"
