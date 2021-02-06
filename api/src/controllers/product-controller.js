@@ -103,5 +103,18 @@ exports.put = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-  res.status(200).send(req.body);
+  Product
+    .findOneAndRemove(req.body.id)
+    .then(x => {
+      res.status(200).send({
+        message: "O produto foi removido com sucesso!"
+      })
+    .catch(err => {
+      console.log(err)
+      res.status(400).send({
+        message: "O produto não foi removido , ERRO",
+        err: err
+      })
+    })  
+  })
 };
