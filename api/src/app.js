@@ -29,6 +29,7 @@ const Order = require('./models/order');
 const indexRoutes = require('./routes/indexRoute');
 const productRoutes = require('./routes/productRoutes');
 const customerRoutes = require('./routes/customerRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 app.use(bodyParser.json()); // Faz com que toda req vira um json
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,6 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', indexRoutes);
 app.use('/products', productRoutes);
 app.use('/customer', customerRoutes);
+app.use('/orders', orderRoutes);
 
 
 module.exports = app;

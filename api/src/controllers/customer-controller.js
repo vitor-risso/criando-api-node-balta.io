@@ -25,3 +25,12 @@ exports.post = async (req, res, next) => {
     })
   }
 };
+
+exports.get = async (req, res, next) => {
+  try {
+    let data = await repository.get();
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({message: "Falha ao listar produtos", err: error})
+  }
+}
