@@ -22,19 +22,20 @@ mongoose.connect('mongodb://localhost:27017/node-store', {
 
 //Load models
 const Product = require('./models/product');
-const Costumer = require('./models/costumer');
+const Customer = require('./models/customer');
 const Order = require('./models/order');
 
 //Load routes
 const indexRoutes = require('./routes/indexRoute');
 const productRoutes = require('./routes/productRoutes');
-
+const customerRoutes = require('./routes/customerRoutes');
 
 app.use(bodyParser.json()); // Faz com que toda req vira um json
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', indexRoutes);
 app.use('/products', productRoutes);
+app.use('/customer', customerRoutes);
 
 
 module.exports = app;
