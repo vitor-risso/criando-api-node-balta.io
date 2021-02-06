@@ -12,6 +12,14 @@ exports.get = async (req, res, next) => {
   }
 }
 
+exports.delete = async (req, res, next) => {
+  try {
+    await repository.delete(req.params.id);
+    return res.status(200).send({message: "Pedido removido"})
+  } catch (error) {
+    res.status(500).send({message: "Pedido nao foi encontrado"})
+  }
+}
 
 exports.post = async (req, res, next) => {
  
