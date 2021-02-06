@@ -3,33 +3,37 @@
 const mongoose = require('mongoose');
 const Product = mongoose.model('Product');
 
-exports.get = () => {
-  return Product 
+exports.get = async () => {
+  const res = await Product 
     .find({
       active: true
     }, 'title price slug' ) //segundo parametro do find são as areas que voce quer ver
+
+    return res
 }
 
-exports.getBySlug = (slug) => {
-  return Product.find({ slug: slug, active:true  }, 'title description price slug tags') //segundo parametro do find são as areas que voce quer ver
+exports.getBySlug = async (slug) => {
+  const res = await Product.find({ slug: slug, active:true  }, 'title description price slug tags') //segundo parametro do find são as areas que voce quer ver
+  return res
 }
 
-exports.getById = (id) => {
-  return Product.findById(id)
+exports.getById = async (id) => {
+  let res = await Product.findById(id);
+  return res;
 }
 
-exports.getByTag = (tag) => {
-  return Product.findOneAndUpdate(tag)
+exports.getByTag = async (tag) => {
+  let res = await Product.findOneAndUpdate(tag);
+  return res
 }
 
-exports.create = (data) => {
+exports.create = async (data) => {
   let product = new Product(data);
-
-  return product.save()
+  await product.save();
 }
 
-exports.edit = (id, data) => {
-  return Product
+exports.edit = async (id, data) => {
+  await Product
   .findByIdAndUpdate(id, {
     $set:{
       title: data.title,
@@ -39,7 +43,7 @@ exports.edit = (id, data) => {
   })
 } 
 
-exports.delete = (id) => {
-  return   Product
+exports.delete = async (id) => {
+  await Product
   .findOneAndRemove(id)
 }

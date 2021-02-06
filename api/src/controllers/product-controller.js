@@ -4,64 +4,57 @@ const mongoose = require('mongoose');
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/product-repository');
 
-exports.get = (req, res, next) => {
-  repository
-    .get()
-    .then(result => {
-      res.status(200).send(result)
-    })
-    .catch(err => {
-      res.status(400).send({
-        message: "Erro ao carregar produtos",
-        error: err
-      })
-    })
+exports.get = async (req, res, next) => {
+  try {
+    let data = await repository.get();
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({message: "Falha ao listar produtos", err: error})
+  }
 }
 
-exports.getBySlug = (req, res, next) => {
-  repository
-    .getBySlug(req.params.slug)
-    .then(result => {
-      res.status(200).send(result)
+exports.getBySlug = async (req, res, next) => {
+  
+  try {
+    let data = await repository.getBySlug(req.params.slug)
+    res.status(200).send(data)  
+  } catch (error) {
+    res.status(400).send({
+      message: "Erro ao carregar produtos",
+      error: error
     })
-    .catch(err => {
-      res.status(400).send({
-        message: "Erro ao carregar produtos",
-        error: err
-      })
-    })
+  }
 }
 
-exports.getById= (req, res, next) => {
-  repository
-    .getById(req.params.id)
-    .then(result => {
-      res.status(200).send(result)
+exports.getById= async (req, res, next) => {
+  
+  try {
+    let data = await repository.getById(req.params.id)
+    res.status(200).send(data)
+    
+  } catch (error) {
+    res.status(400).send({
+      message: "Erro ao carregar produtos",
+      error: error
     })
-    .catch(err => {
-      res.status(400).send({
-        message: "Erro ao carregar produtos",
-        error: err
-      })
-    })
+    
+  }
 }
 
-exports.getByTag= (req, res, next) => {
-  repository
-    .getByTag(req.params.tag)
-    .then(result => {
-      res.status(200).send(result)
+exports.getByTag= async (req, res, next) => {
+  
+  try {
+    let data = await repository.getByTag(req.params.tag)
+    res.status(200).send(data)
+  } catch (error) {
+    res.status(400).send({
+      message: "Erro ao carregar produtos",
+      error: error
     })
-    .catch(err => {
-      console.log(err)
-      res.status(400).send({
-        message: "Erro ao carregar produtos",
-        error: err
-      })
-    })
+  }
 }
 
-exports.post = (req, res, next) => {
+exports.post = async (req, res, next) => {
   
   // let product = new Product();
   // product.title = req.body.title;
@@ -82,47 +75,42 @@ exports.post = (req, res, next) => {
     return;
   }
 
-  repository.create(req.body)
-    .then(result => {
-      res.status(201).send({message:'Produto cadastrado'})
+  try {
+    let data = await repository.create(req.body)
+    res.status(201).send({message:'Produto cadastrado'})
+  } catch (error) {
+    res.status(400).send({
+      message:'Falha  ao cadastrar produto'
     })
-    .catch(err => {
-      res.status(400).send({
-        message:'Falha  ao cadastrar produto'
-      })
-      console.error('Nao deu nao', err)
-    });
-
+  }
 };
 
-exports.put = (req, res, next) => {
-  repository.edit(req.params.id, req.body)
-    .then(x => {
-      res.status(200).send({
-        message: "O produto foi atualizado com sucesso!"
-      })
-    .catch(err => {
+exports.put = async (req, res, next) => {
+  try{
+    let data = await repository.edit(req.params.id, req.body)
+    res.status(200).send({
+      message: "O produto foi atualizado com sucesso!"
+    })
+  }catch(err)  {
       console.log(err)
       res.status(400).send({
         message: "O produto não foi atualizado , ERRO",
         err: err
       })
-    })  
-    })
+  }
 };
 
-exports.delete = (req, res, next) => {
-  repository.delete(req.body.id)
-    .then(x => {
-      res.status(200).send({
-        message: "O produto foi removido com sucesso!"
-      })
-    .catch(err => {
+exports.delete = async (req, res, next) => {
+  try{
+    await repository.delete(req.body.id)
+    res.status(200).send({
+      message: "O produto foi removido com sucesso!"
+    })
+  } catch(err) {
       console.log(err)
       res.status(400).send({
         message: "O produto não foi removido , ERRO",
         err: err
       })
-    })  
-  })
+  }
 };
