@@ -3,12 +3,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require('./config');
 
 const app = express();
 const router = express.Router();
 
 //DB conection
-mongoose.connect('mongodb://localhost:27017/node-store', {
+mongoose.connect(config.connectionString, {
   "auth": {
     "authSource": "admin"
   },
