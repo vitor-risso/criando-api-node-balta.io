@@ -34,7 +34,12 @@ const schema = new Schema({
   tags:[{
     type: String, 
     required: true
-  }]
+  }],
+  image:{
+    type: String,
+    required: true,
+    trim: true
+  }
 });
 
 var Product = mongoose.model('Product', schema)

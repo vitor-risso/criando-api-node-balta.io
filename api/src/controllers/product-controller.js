@@ -2,6 +2,8 @@
 
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/product-repository');
+const azure = require('azure-storage');
+const guid = require('guid');
 
 exports.get = async (req, res, next) => {
   try {
@@ -75,7 +77,34 @@ exports.post = async (req, res, next) => {
   }
 
   try {
-    let data = await repository.create(req.body)
+    // Criar o blob service
+    const blobSvc = azure.createBlobService(config.containerConnectionString) ;
+    
+    let rawdata = req.body.image;
+    let filename = guid.raw().toString() + '.jpg';
+    let matches = rawdata.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    let type = matches[1];
+    let buffer = new Buffer(matches[2], 'base64');
+
+
+    //salva img
+    await blobSvc.createBlockBlobFromText('product-images', filename, buffer, {
+      contentType: type
+      }, function (error, result, response) {
+        if (error) {
+          filename = 'default-product.png'
+        }
+     });
+
+    await repository.create({
+      title: req.boddy.title ,
+      slug: req.boddy.slug ,
+      description: req.boddy.description ,
+      price: req.boddy.price ,
+      active: true,
+      tags: req.boddy.tags ,
+      image: 'https://cs21003200114e82215.blob.core.windows.net/product-images' + filename ,
+    })
     res.status(201).send({message:'Produto cadastrado'})
   } catch (error) {
     res.status(400).send({
@@ -83,7 +112,6 @@ exports.post = async (req, res, next) => {
     })
   }
 };
-
 exports.put = async (req, res, next) => {
   try{
     let data = await repository.edit(req.params.id, req.body)
