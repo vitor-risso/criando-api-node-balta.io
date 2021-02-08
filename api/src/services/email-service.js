@@ -21,7 +21,7 @@ exports.send = async(to, subject, body) => {
         }
       ],
       from: {
-        email: 'hello@balta.io'
+        email: 'risso.vitor.vitor37@gmail.com'
       },
       content: [
         {
