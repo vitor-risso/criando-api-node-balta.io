@@ -25,3 +25,10 @@ exports.authenticate = async (data) => {
 
     return res
 }
+
+exports.getById = async (id) => {
+  const res = await Customer 
+    .findById(id) //segundo parametro do find são as areas que voce quer ver
+
+    return res
+}

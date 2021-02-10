@@ -56,19 +56,56 @@ exports.authenticate = async (req, res, next) => {
     })
 
     if(!customer){
-      res.status(2404).send({
+      res.status(404).send({
         message: 'user/psswd not found'
       });
       return;
     }
 
     const token = await authService.generateToken({
+        id: customer._id,
+        email: customer.email,
+        name: customer.name,
+    })    
+
+    res.status(201).send({
+      token: token,
+      data: {
+        email: customer.email,
+        name: customer.name
+      }
+    })
+  } catch (error) {
+    res.status(400).send({
+      message:'Falha  ao cadastrar cliente'
+    })
+  }
+};
+
+exports.refreshToken = async (req, res, next) => {
+  try {
+    //recuperar o token
+    let token = req.body.token || req.query.token || req.headers['x-acess-token'];
+
+    //decode token
+    const data = await authService.decodeToken(token);
+    
+    const customer = await repository.getById(data.id)
+
+    if(!customer){
+      res.status(404).send({
+        message: 'user not found'
+      });
+      return;
+    }
+
+    const tokenData = await authService.generateToken({
       email: customer.email, 
       name: customer.name
     })    
 
     res.status(201).send({
-      token: token,
+      token: tokenData,
       data: {
         email: customer.email,
         name: customer.name
