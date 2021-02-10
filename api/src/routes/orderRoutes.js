@@ -6,7 +6,7 @@ const controller = require('../controllers/order-controller');
 const authService = require('../services/auth-service');
 
 router.post('/', authService.authorize, controller.post);
-router.get('/', controller.get);
+router.get('/', authService.authorize, controller.get);
 router.delete('/:id', authService.authorize, controller.delete);
 
 module.exports = router;

@@ -10,7 +10,7 @@ exports.create = async (data) => {
 
 exports.get = async () => {
   const res = await Customer 
-    .find({}) //segundo parametro do find são as areas que voce quer ver
+    .find() //segundo parametro do find são as areas que voce quer ver
 
     return res
 }
