@@ -14,3 +14,14 @@ exports.get = async () => {
 
     return res
 }
+
+
+exports.authenticate = async (data) => {
+  const res = await Customer 
+    .findOne({
+      email: data.email,
+      password: data.password
+    }) //segundo parametro do find são as areas que voce quer ver
+
+    return res
+}
