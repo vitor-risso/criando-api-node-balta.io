@@ -21,7 +21,7 @@ exports.send = async(to, subject, body) => {
         }
       ],
       from: {
-        email: 'risso.vitor.vitor37@gmail.com'
+        email: global.EMAIL
       },
       content: [
         {
@@ -34,9 +34,10 @@ exports.send = async(to, subject, body) => {
 
   await sendgrid.API(request)
   .then(response => {
-    console.log(response.statusCode);
-    console.log(response.body);
-    console.log(response.headers);
+   // console.log(response.statusCode);
+    // console.log(response.body);
+    // console.log(response.headers);
+    console.log('email enviado com sucesso')
   })
   .catch(error => {
     //error is an instance of SendGridError
