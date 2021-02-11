@@ -32,7 +32,9 @@ const productRoutes = require('./routes/productRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 
-app.use(bodyParser.json()); // Faz com que toda req vira um json
+app.use(bodyParser.json({
+  limit: '5mb'
+})); // Faz com que toda req vira um json
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', indexRoutes);
