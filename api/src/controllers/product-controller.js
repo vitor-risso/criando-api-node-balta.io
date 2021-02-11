@@ -99,12 +99,12 @@ exports.post = async (req, res, next) => {
      });
 
     await repository.create({
-      title: req.boddy.title ,
-      slug: req.boddy.slug ,
-      description: req.boddy.description ,
-      price: req.boddy.price ,
+      title: req.body.title ,
+      slug: req.body.slug ,
+      description: req.body.description ,
+      price: req.body.price ,
       active: true,
-      tags: req.boddy.tags ,
+      tags: req.body.tags ,
       image: 'https://cs21003200114e82215.blob.core.windows.net/product-images' + filename ,
     })
     res.status(201).send({message:'Produto cadastrado'})

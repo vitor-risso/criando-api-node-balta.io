@@ -9,8 +9,8 @@ router.get('/', controller.get);
 router.get('/:slug', controller.getBySlug); // a rota tem q estar que nem no controler. req.params.slug
 router.get('/admin/:id', controller.getById); // a rota tem q estar que nem no controler. req.params.id
 router.get('/tags/:tag', controller.getByTag); // a rota tem q estar que nem no controler. req.params.tag
-router.post('/', authService.authorize, controller.post);
-router.put('/:id', authService.authorize, controller.put);
-router.delete('/', authService.authorize, controller.delete);
+router.post('/', authService.isAdmin, controller.post);
+router.put('/:id', authService.isAdmin, controller.put);
+router.delete('/', authService.isAdmin, controller.delete);
 
 module.exports = router;

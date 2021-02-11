@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
   customer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Customer'
+      ref: 'Customers'
   },
   number: {
       type: String,
@@ -35,7 +35,7 @@ const schema = new Schema({
       },
       product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product'
+          ref: 'products'
       }
   }],
 });
