@@ -37,6 +37,13 @@ app.use(bodyParser.json({
 })); // Faz com que toda req vira um json
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//habilitando CORS
+app.use(function(req,res,next){
+  res.header('Acess-Control-Allow-Origin', '*');
+  res.header('Acess-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-acess-token');
+  res.header('Acess-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+});
+
 app.use('/', indexRoutes);
 app.use('/products', productRoutes);
 app.use('/customer', customerRoutes);
@@ -44,3 +51,4 @@ app.use('/orders', orderRoutes);
 
 
 module.exports = app;
+;
