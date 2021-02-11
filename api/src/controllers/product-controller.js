@@ -4,6 +4,7 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/product-repository');
 const azure = require('azure-storage');
 const guid = require('guid');
+const config = require('../config');
 
 exports.get = async (req, res, next) => {
   try {
@@ -80,9 +81,10 @@ exports.post = async (req, res, next) => {
     // Criar o blob service
     const blobSvc = azure.createBlobService(config.containerConnectionString) ;
     
-    let rawdata = req.body.image;
     let filename = guid.raw().toString() + '.jpg';
-    let matches = rawdata.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    let rawdata = req.body.image;
+    let matches = rawdata.match(/^data([A-Za-z-+\/]+);base64,(.+)$/);
+    console.log(matches)
     let type = matches[1];
     let buffer = new Buffer(matches[2], 'base64');
 
@@ -107,6 +109,7 @@ exports.post = async (req, res, next) => {
     })
     res.status(201).send({message:'Produto cadastrado'})
   } catch (error) {
+    console.log(error)
     res.status(400).send({
       message:'Falha  ao cadastrar produto'
     })
